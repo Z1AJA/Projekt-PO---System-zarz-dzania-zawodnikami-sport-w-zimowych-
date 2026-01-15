@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace system_zawodnicy_zimowi.core.Domain.Exeptions
+namespace system_zawodnicy_zimowi.core.Domain.Exceptions
 {
     public class DomainValidationException : Exception
     {
