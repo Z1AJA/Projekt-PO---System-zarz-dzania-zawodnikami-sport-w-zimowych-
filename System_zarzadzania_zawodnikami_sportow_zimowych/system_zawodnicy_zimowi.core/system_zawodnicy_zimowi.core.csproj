@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Domain\Exeptions\" />
     <Folder Include="Domain\Interfaces\" />
     <Folder Include="Domain\Entities\" />
   </ItemGroup>
