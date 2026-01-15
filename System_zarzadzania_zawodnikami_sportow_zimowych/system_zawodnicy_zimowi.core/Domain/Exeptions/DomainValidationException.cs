@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace system_zawodnicy_zimowi.core.Domain.Exeptions
 {
-    internal class DomainValidationException : Exception
+    public class DomainValidationException : Exception
     {
         public DomainValidationException(string message) : base(message) { }
     }

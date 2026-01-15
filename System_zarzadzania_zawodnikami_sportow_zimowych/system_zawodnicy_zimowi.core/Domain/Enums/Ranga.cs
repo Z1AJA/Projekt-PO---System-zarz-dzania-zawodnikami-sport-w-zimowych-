@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace system_zawodnicy_zimowi.core.Domain.Enums
 {
-    internal enum Ranga
+    public enum Ranga
     {
         Junior = 1,
         Amator = 2,
