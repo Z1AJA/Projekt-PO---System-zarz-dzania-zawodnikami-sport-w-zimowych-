@@ -10,7 +10,6 @@
     <Folder Include="Domain\Exeptions\" />
     <Folder Include="Domain\Interfaces\" />
     <Folder Include="Domain\Entities\" />
-    <Folder Include="Domain\Enums\" />
   </ItemGroup>
 
 </Project>
