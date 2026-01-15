@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Domain\Interfaces\" />
-    <Folder Include="Domain\Entities\" />
   </ItemGroup>
 
 </Project>
