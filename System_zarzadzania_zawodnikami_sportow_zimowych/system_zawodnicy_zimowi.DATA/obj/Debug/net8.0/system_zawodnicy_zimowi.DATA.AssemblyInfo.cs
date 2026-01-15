@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("system_zawodnicy_zimowi.DATA")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a98aeabbc903ee3bd7eda7ea3e993f4950b37160")]
 [assembly: System.Reflection.AssemblyProductAttribute("system_zawodnicy_zimowi.DATA")]
 [assembly: System.Reflection.AssemblyTitleAttribute("system_zawodnicy_zimowi.DATA")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
