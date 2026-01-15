@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using system_zawodnicy_zimowi.core.Domain.Enums;
 using system_zawodnicy_zimowi.core.Domain.Exeptions;
+using System.Collections.Generic;
+using System.Linq;
+
 
 namespace system_zawodnicy_zimowi.core.Domain.Entities
 {
@@ -90,6 +93,41 @@ namespace system_zawodnicy_zimowi.core.Domain.Entities
             if (trimmed.Length < 2 || trimmed.Length > 40)
                 throw new DomainValidationException($"{fieldName} musi mieć 2–40 znaków.");
         }
+
+        private readonly List<WynikZawodow> _wyniki = new();
+
+        public IReadOnlyList<WynikZawodow> Wyniki => _wyniki.AsReadOnly();
+
+        public void DodajWynik(WynikZawodow wynik)
+        {
+            if (wynik is null) throw new DomainValidationException("Wynik nie może być null.");
+            _wyniki.Add(wynik);
+        }
+
+        public bool UsunWynik(Guid wynikId)
+        {
+            var w = _wyniki.FirstOrDefault(x => x.Id == wynikId);
+            if(w is null) return false;
+            _wyniki.Remove(w);
+            return true;
+        }
+
+        public IReadOnlyList<WynikZawodow> PobierzWynikiChronologicznie()
+        {
+            return _wyniki.OrderBy(x => x.Data).ToList().AsReadOnly();
+        }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
