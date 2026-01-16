@@ -84,7 +84,12 @@ namespace system_zawodnicy_zimowi.core.Storage
 
 
         private static KlubSportowy FromDto(KlubDto k)
-            => new KlubSportowy(k.Nazwa, k.MinimalnePunkty, k.MaksWiek, k.Dyscypliny, k.LimitMiejsc);
+        {
+            var klub = new KlubSportowy(k.Nazwa, k.MinimalnePunkty, k.MaksWiek, k.Dyscypliny, k.LimitMiejsc);
+            klub.Id = k.Id;
+            return klub;
+        }
+
 
         private static Zawodnik FromDto(ZawodnikDto z)
         {
@@ -94,6 +99,8 @@ namespace system_zawodnicy_zimowi.core.Storage
                 Dyscyplina.Snowboard => new Snowboardzista(z.Imie, z.Nazwisko, z.Wiek),
                 _ => new Snowboardzista(z.Imie, z.Nazwisko, z.Wiek)
             };
+
+            zawodnik.Id = z.Id;
 
             // Punkty i ranga
             zawodnik.SetPunktyIRange(z.Punkty, z.Ranga);
@@ -106,6 +113,7 @@ namespace system_zawodnicy_zimowi.core.Storage
             foreach (var w in z.Wyniki)
             {
                 var wynik = new WynikZawodow(w.Data, w.NazwaZawodow, w.Miejsce, w.TrudnoscTrasy, w.PunktyBazowe);
+                wynik.Id = w.Id;
                 zawodnik.DodajWynik(wynik);
             }
 

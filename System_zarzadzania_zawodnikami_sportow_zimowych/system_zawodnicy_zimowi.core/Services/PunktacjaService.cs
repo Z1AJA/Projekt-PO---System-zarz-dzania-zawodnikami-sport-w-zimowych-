@@ -14,6 +14,10 @@ namespace system_zawodnicy_zimowi.core.Services
 
         public event Action<Zawodnik, Ranga, Ranga>? RangaZmieniona;
 
+
+
+
+
         public void Przelicz(Zawodnik zawodnik)
         {
             if (zawodnik is null) throw new ArgumentNullException(nameof(zawodnik));
@@ -30,6 +34,9 @@ namespace system_zawodnicy_zimowi.core.Services
             }
         }
 
+
+
+
         public int ObliczPunkty(Zawodnik zawodnik)
         {
             // 10 ostatnich wyników (punktyBazowe + bonus) * trudnosc
@@ -45,29 +52,29 @@ namespace system_zawodnicy_zimowi.core.Services
 
             int sum = 0;
 
-            foreach (var  w in last)
+            foreach (var w in last)
             {
                 int bonus = Math.Max(0, 120 - w.Miejsce);
                 int pkt = (w.PunktyBazowe + bonus) * w.TrudnoscTrasy;
                 sum += pkt;
             }
 
-            return (int)(sum * dyscyplinaFactor, , MidpointRounding.AwayFromZero); // zaokraglenie na korzysc zawodnika
-
-            public Ranga WyznaczRange(int punkty)
-            {
-                if (punkty < 3000) return Ranga.Junior;
-                if (punkty < 9000) return Ranga.Amator; // its over 9000
-                if (punkty < 20000) return Ranga.SemiPro;
-                return Ranga.Pro;
-            }
-
-
-
+            return (int)Math.Round(sum * dyscyplinaFactor, MidpointRounding.AwayFromZero); // zaokraglenie na korzysc zawodnika
         }
 
 
 
+        public Ranga WyznaczRange(int punkty)
+        {
+            if (punkty < 3000) return Ranga.Junior;
+            if (punkty < 9000) return Ranga.Amator; // its over 9000
+            if (punkty < 20000) return Ranga.SemiPro;
+            return Ranga.Pro;
+        }
+
+
+
+     }
 
 
 
@@ -81,5 +88,8 @@ namespace system_zawodnicy_zimowi.core.Services
 
 
 
-    }
+
+
+
 }
+
