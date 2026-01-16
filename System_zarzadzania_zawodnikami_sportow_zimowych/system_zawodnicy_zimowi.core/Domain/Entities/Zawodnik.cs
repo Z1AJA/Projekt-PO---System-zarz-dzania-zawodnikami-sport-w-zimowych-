@@ -118,8 +118,27 @@ namespace system_zawodnicy_zimowi.core.Domain.Entities
         }
 
 
+        public Guid? KlubId { get; private set; }
+        public string? KlubNazwa { get; private set; }
 
 
+        public void PrzypiszKlub(Guid klubId, string klubNazwa)
+        {
+            if (klubId == Guid.Empty)
+                throw new DomainValidationException("KlubId nie może być pusty.");
+
+            if (string.IsNullOrWhiteSpace(klubNazwa))
+                throw new DomainValidationException("Nazwa klubu nie może być pusta.");
+
+            KlubId = klubId;
+            KlubNazwa = klubNazwa.Trim();
+        }
+
+        public void WypiszZKlubu()
+        {
+            KlubId = null;
+            KlubNazwa = null;
+        }
 
 
 
