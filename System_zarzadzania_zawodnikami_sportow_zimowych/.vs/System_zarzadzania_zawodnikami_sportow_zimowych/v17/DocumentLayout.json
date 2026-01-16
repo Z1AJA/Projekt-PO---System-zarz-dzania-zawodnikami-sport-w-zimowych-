@@ -3,16 +3,8 @@
   "WorkspaceRootPath": "C:\\Users\\Admin\\Desktop\\agh\\3 semestr\\Programowanie obiektowe\\PO Projekt\\System_zarzadzania_zawodnikami_sportow_zimowych\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{4E4ADC46-D838-40FD-AD35-0E7A5C7064A9}|system_zawodnicy_zimowi.core\\system_zawodnicy_zimowi.core.csproj|c:\\users\\admin\\desktop\\agh\\3 semestr\\programowanie obiektowe\\po projekt\\system_zarzadzania_zawodnikami_sportow_zimowych\\system_zawodnicy_zimowi.core\\domain\\entities\\wynikzawodow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4E4ADC46-D838-40FD-AD35-0E7A5C7064A9}|system_zawodnicy_zimowi.core\\system_zawodnicy_zimowi.core.csproj|solutionrelative:system_zawodnicy_zimowi.core\\domain\\entities\\wynikzawodow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4E4ADC46-D838-40FD-AD35-0E7A5C7064A9}|system_zawodnicy_zimowi.core\\system_zawodnicy_zimowi.core.csproj|c:\\users\\admin\\desktop\\agh\\3 semestr\\programowanie obiektowe\\po projekt\\system_zarzadzania_zawodnikami_sportow_zimowych\\system_zawodnicy_zimowi.core\\domain\\entities\\klubsportowy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4E4ADC46-D838-40FD-AD35-0E7A5C7064A9}|system_zawodnicy_zimowi.core\\system_zawodnicy_zimowi.core.csproj|solutionrelative:system_zawodnicy_zimowi.core\\domain\\entities\\klubsportowy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4E4ADC46-D838-40FD-AD35-0E7A5C7064A9}|system_zawodnicy_zimowi.core\\system_zawodnicy_zimowi.core.csproj|c:\\users\\admin\\desktop\\agh\\3 semestr\\programowanie obiektowe\\po projekt\\system_zarzadzania_zawodnikami_sportow_zimowych\\system_zawodnicy_zimowi.core\\domain\\entities\\zawodnik.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4E4ADC46-D838-40FD-AD35-0E7A5C7064A9}|system_zawodnicy_zimowi.core\\system_zawodnicy_zimowi.core.csproj|solutionrelative:system_zawodnicy_zimowi.core\\domain\\entities\\zawodnik.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{4E4ADC46-D838-40FD-AD35-0E7A5C7064A9}|system_zawodnicy_zimowi.core\\system_zawodnicy_zimowi.core.csproj|c:\\users\\admin\\desktop\\agh\\3 semestr\\programowanie obiektowe\\po projekt\\system_zarzadzania_zawodnikami_sportow_zimowych\\system_zawodnicy_zimowi.core\\services\\punktacjaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4E4ADC46-D838-40FD-AD35-0E7A5C7064A9}|system_zawodnicy_zimowi.core\\system_zawodnicy_zimowi.core.csproj|solutionrelative:system_zawodnicy_zimowi.core\\services\\punktacjaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -31,40 +23,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "WynikZawodow.cs",
-              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\agh\\3 semestr\\Programowanie obiektowe\\PO Projekt\\System_zarzadzania_zawodnikami_sportow_zimowych\\system_zawodnicy_zimowi.core\\Domain\\Entities\\WynikZawodow.cs",
-              "RelativeDocumentMoniker": "system_zawodnicy_zimowi.core\\Domain\\Entities\\WynikZawodow.cs",
-              "ToolTip": "C:\\Users\\Admin\\Desktop\\agh\\3 semestr\\Programowanie obiektowe\\PO Projekt\\System_zarzadzania_zawodnikami_sportow_zimowych\\system_zawodnicy_zimowi.core\\Domain\\Entities\\WynikZawodow.cs",
-              "RelativeToolTip": "system_zawodnicy_zimowi.core\\Domain\\Entities\\WynikZawodow.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAABAAAAAyAAAAAAAAAA==",
+              "Title": "PunktacjaService.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\agh\\3 semestr\\Programowanie obiektowe\\PO Projekt\\System_zarzadzania_zawodnikami_sportow_zimowych\\system_zawodnicy_zimowi.core\\Services\\PunktacjaService.cs",
+              "RelativeDocumentMoniker": "system_zawodnicy_zimowi.core\\Services\\PunktacjaService.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\agh\\3 semestr\\Programowanie obiektowe\\PO Projekt\\System_zarzadzania_zawodnikami_sportow_zimowych\\system_zawodnicy_zimowi.core\\Services\\PunktacjaService.cs",
+              "RelativeToolTip": "system_zawodnicy_zimowi.core\\Services\\PunktacjaService.cs",
+              "ViewState": "AgIAAC0AAAAAAAAAAAAYwEAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-16T13:50:21.907Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "KlubSportowy.cs",
-              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\agh\\3 semestr\\Programowanie obiektowe\\PO Projekt\\System_zarzadzania_zawodnikami_sportow_zimowych\\system_zawodnicy_zimowi.core\\Domain\\Entities\\KlubSportowy.cs",
-              "RelativeDocumentMoniker": "system_zawodnicy_zimowi.core\\Domain\\Entities\\KlubSportowy.cs",
-              "ToolTip": "C:\\Users\\Admin\\Desktop\\agh\\3 semestr\\Programowanie obiektowe\\PO Projekt\\System_zarzadzania_zawodnikami_sportow_zimowych\\system_zawodnicy_zimowi.core\\Domain\\Entities\\KlubSportowy.cs",
-              "RelativeToolTip": "system_zawodnicy_zimowi.core\\Domain\\Entities\\KlubSportowy.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-16T13:50:20.813Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Zawodnik.cs",
-              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\agh\\3 semestr\\Programowanie obiektowe\\PO Projekt\\System_zarzadzania_zawodnikami_sportow_zimowych\\system_zawodnicy_zimowi.core\\Domain\\Entities\\Zawodnik.cs",
-              "RelativeDocumentMoniker": "system_zawodnicy_zimowi.core\\Domain\\Entities\\Zawodnik.cs",
-              "ToolTip": "C:\\Users\\Admin\\Desktop\\agh\\3 semestr\\Programowanie obiektowe\\PO Projekt\\System_zarzadzania_zawodnikami_sportow_zimowych\\system_zawodnicy_zimowi.core\\Domain\\Entities\\Zawodnik.cs",
-              "RelativeToolTip": "system_zawodnicy_zimowi.core\\Domain\\Entities\\Zawodnik.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-16T13:50:18.266Z",
+              "WhenOpened": "2026-01-16T14:18:56.325Z",
               "EditorCaption": ""
             }
           ]
