@@ -12,7 +12,7 @@ namespace system_zawodnicy_zimowi.core.Domain.Entities
     {
         private string _nazwa = "";
 
-        public Guid Id { get; private set; } = Guid.NewGuid();
+        public Guid Id { get; internal set; } = Guid.NewGuid();
         public string Nazwa { get => _nazwa;
             private set
             {

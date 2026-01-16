@@ -16,7 +16,7 @@ namespace system_zawodnicy_zimowi.core.Domain.Entities
         private string _imie = "";
         private string _nazwisko = "";
 
-        public Guid Id { get; private set; } = Guid.NewGuid();
+        public Guid Id { get; internal set; } = Guid.NewGuid();
         public string Imie { get => _imie; protected set
             {
                 ValidateName(value, nameof(Imie));

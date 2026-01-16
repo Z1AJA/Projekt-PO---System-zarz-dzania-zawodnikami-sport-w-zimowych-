@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using system_zawodnicy_zimowi.core.Domain.Entities;
+using system_zawodnicy_zimowi.core.Domain.Enums;
+
 
 namespace system_zawodnicy_zimowi.core.Services
 {
@@ -23,7 +25,7 @@ namespace system_zawodnicy_zimowi.core.Services
 
 
         
-        public event Action<Zawodnik, Domain.Enums.Ranga, Domain.Enums.Ranga>? RangaZmieniona
+        public event Action<Zawodnik, Ranga, Ranga>? RangaZmieniona
         {
             add { _punktacja.RangaZmieniona += value; }
             remove { _punktacja.RangaZmieniona -= value; }
@@ -79,8 +81,8 @@ namespace system_zawodnicy_zimowi.core.Services
 
         public IReadOnlyList<Zawodnik> FiltrujRanking(
             IEnumerable<Zawodnik> zawodnicy,
-            Domain.Enums.Dyscyplina? dyscyplina = null,
-            Domain.Enums.Ranga? ranga = null,
+            Dyscyplina? dyscyplina = null,
+            Ranga? ranga = null,
             int? minPunkty = null,
             int? maxWiek = null,
             Guid? klubId = null)
