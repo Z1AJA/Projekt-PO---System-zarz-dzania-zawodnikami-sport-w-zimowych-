@@ -5,9 +5,9 @@ using system_zawodnicy_zimowi.core.Domain.Entities;
 using system_zawodnicy_zimowi.core.Domain.Enums;
 using system_zawodnicy_zimowi.core.Domain.Exceptions;
 
-namespace system_zawodnicy_zimowi.ConsoleAPP
+namespace system_zawodnicy_zimowi.consoleAPP
 {
-    class Program
+    class app
     {
         static void Main(string[] args)
         {
