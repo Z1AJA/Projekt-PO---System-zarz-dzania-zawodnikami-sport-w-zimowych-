@@ -18,5 +18,6 @@ namespace system_zawodnicy_zimowi.core.Domain.Entities
             copy.SetPunktyIRange(Punkty, Ranga);
             return copy;
         }
+        private NarciarzAlpejski() { }
     }
 }

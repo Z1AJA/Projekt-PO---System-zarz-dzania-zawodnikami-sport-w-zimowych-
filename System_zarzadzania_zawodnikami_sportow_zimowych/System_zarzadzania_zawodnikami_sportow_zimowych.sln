@@ -10,6 +10,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "system_zawodnicy_zimowi.wpfAPP", "wpfAPP\system_zawodnicy_zimowi.wpfAPP.csproj", "{087DC11D-0359-4BB0-B528-8E85457B2C44}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "system_zawodnicy_zimowi.consoleAPP", "system_zawodnicy_zimowi.consoleAPP\system_zawodnicy_zimowi.consoleAPP.csproj", "{F9B8D918-7086-4414-A045-B75244D248ED}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B6939F26-30A0-42E5-8932-5A9BF4433891} = {B6939F26-30A0-42E5-8932-5A9BF4433891}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "system_zawodnicy_zimowi.tests", "system_zawodnicy_zimowi.tests\system_zawodnicy_zimowi.tests.csproj", "{942238BF-FA91-430D-A352-1D4426FB3B92}"
 EndProject

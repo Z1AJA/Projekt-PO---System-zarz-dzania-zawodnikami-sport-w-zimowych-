@@ -10,6 +10,7 @@ namespace system_zawodnicy_zimowi.core.Domain.Entities
 {
     public class WynikZawodow
     {
+        private WynikZawodow() { }
         private string _nazwaZawodow = "";
 
         public Guid Id { get; internal set; } = Guid.NewGuid();

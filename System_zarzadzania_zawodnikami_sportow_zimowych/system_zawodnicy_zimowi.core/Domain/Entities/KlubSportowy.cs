@@ -10,6 +10,7 @@ namespace system_zawodnicy_zimowi.core.Domain.Entities
 {
     public class KlubSportowy
     {
+        private KlubSportowy() { }
         private string _nazwa = "";
 
         public Guid Id { get; internal set; } = Guid.NewGuid();
