@@ -1,154 +1,183 @@
 ﻿<Window x:Class="system_zawodnicy_zimowi.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="System Zawodników - Manager (z Punktacją)" Height="700" Width="1100"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        Title="Manager Sportów Zimowych v3.0 (Bez dodatkowych klas)" Height="750" Width="1100"
         WindowStartupLocation="CenterScreen">
 
-    <Grid Margin="15">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+    <Grid Margin="10">
+        <TabControl>
 
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*" />
-                <ColumnDefinition Width="1.5*" />
-            </Grid.ColumnDefinitions>
+            <TabItem Header="ZARZĄDZANIE ZAWODNIKAMI">
+                <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="1.5*" />
+                    </Grid.ColumnDefinitions>
 
-            <GroupBox Header="Baza Zawodników" Grid.Column="0" Margin="0,0,10,0">
-                <DataGrid x:Name="ListaDatagrid" 
-                          AutoGenerateColumns="False" 
-                          IsReadOnly="True"
-                          SelectionMode="Single"
-                          SelectionChanged="ListaDatagrid_SelectionChanged"
-                          BorderThickness="0">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Imię" Binding="{Binding Imie}" Width="*"/>
-                        <DataGridTextColumn Header="Nazwisko" Binding="{Binding Nazwisko}" Width="*"/>
-                        <DataGridTextColumn Header="Wiek" Binding="{Binding Wiek}" Width="50"/>
-                        <DataGridTextColumn Header="Ranga" Binding="{Binding Ranga}" Width="80"/>
-                        <DataGridTextColumn Header="Dyscyplina" Binding="{Binding Dyscyplina}" Width="120"/>
-                        <DataGridTextColumn Header="Klub" Binding="{Binding KlubNazwa}" Width="100"/>
-                        <DataGridTextColumn Header="Punkty" Binding="{Binding Punkty}" Width="60" FontWeight="Bold"/>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </GroupBox>
-
-            <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.ColumnSpan="2" Margin="611,0,0,0">
-                <StackPanel>
-
-                    <GroupBox Header="Rejestracja Zawodnika" Padding="10" Margin="0,0,0,15" BorderBrush="#FF444444">
-                        <StackPanel>
-                            <TextBlock Text="Wybierz typ:" FontWeight="SemiBold"/>
-                            <ComboBox x:Name="CmbTyp" Margin="0,0,0,10" Padding="5">
-                                <ComboBoxItem Content="Narciarz Alpejski" IsSelected="True"/>
-                                <ComboBoxItem Content="Snowboardzista"/>
-                            </ComboBox>
-
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <StackPanel Grid.Column="0" Margin="0,0,5,0">
-                                    <TextBlock Text="Imię:"/>
-                                    <TextBox x:Name="TxtImie" Margin="0,0,0,10"/>
-                                </StackPanel>
-                                <StackPanel Grid.Column="1" Margin="5,0,0,0">
-                                    <TextBlock Text="Nazwisko:"/>
-                                    <TextBox x:Name="TxtNazwisko" Margin="0,0,0,10"/>
-                                </StackPanel>
-                            </Grid>
-
-                            <TextBlock Text="Wiek:"/>
-                            <TextBox x:Name="TxtWiek" Margin="0,0,0,10" Width="50" HorizontalAlignment="Left"/>
-
-                            <Button Content="DODAJ DO BAZY" Click="BtnDodaj_Click" Height="30" Background="#FF3399FF" Foreground="White" FontWeight="Bold"/>
-                        </StackPanel>
+                    <GroupBox Header="Lista Zawodników" Grid.Column="0" Margin="0,0,10,0">
+                        <DataGrid x:Name="ListaDatagrid" AutoGenerateColumns="False" IsReadOnly="True" 
+                                  SelectionMode="Single" SelectionChanged="ListaDatagrid_SelectionChanged">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Imię" Binding="{Binding Imie}" Width="*"/>
+                                <DataGridTextColumn Header="Nazwisko" Binding="{Binding Nazwisko}" Width="*"/>
+                                <DataGridTextColumn Header="Wiek" Binding="{Binding Wiek}" Width="40"/>
+                                <DataGridTextColumn Header="Ranga" Binding="{Binding Ranga}" Width="70"/>
+                                <DataGridTextColumn Header="Klub" Binding="{Binding KlubNazwa}" Width="100"/>
+                                <DataGridTextColumn Header="Pkt" Binding="{Binding Punkty}" Width="50" FontWeight="Bold"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
                     </GroupBox>
 
-                    <GroupBox Header="Dodaj Wynik Zawodów" Padding="10" Margin="0,0,0,15" BorderBrush="Green">
+                    <ScrollViewer Grid.Column="1">
                         <StackPanel>
-                            <TextBlock Text="Dla wybranego zawodnika:" Foreground="Gray" Margin="0,0,0,5"/>
-                            <TextBlock x:Name="TxtWybranyDoWyniku" Text="-- wybierz z listy --" FontWeight="Bold" Margin="0,0,0,10"/>
-
-                            <TextBlock Text="Nazwa Zawodów:"/>
-                            <TextBox x:Name="TxtNazwaZawodow" Margin="0,0,0,5"/>
-
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <StackPanel Grid.Column="0" Margin="0,0,5,0">
-                                    <TextBlock Text="Miejsce (1-300):"/>
-                                    <TextBox x:Name="TxtMiejsce" Margin="0,0,0,5"/>
+                            <GroupBox Header="Nowy Zawodnik" Padding="5" Margin="0,0,0,10">
+                                <StackPanel>
+                                    <ComboBox x:Name="CmbTyp" SelectedIndex="0" Margin="0,0,0,5">
+                                        <ComboBoxItem Content="Narciarz Alpejski"/>
+                                        <ComboBoxItem Content="Snowboardzista"/>
+                                    </ComboBox>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="50"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox x:Name="TxtImie" Grid.Column="0" Margin="0,0,5,0" ToolTip="Imię"/>
+                                        <TextBox x:Name="TxtNazwisko" Grid.Column="1" Margin="0,0,5,0" ToolTip="Nazwisko"/>
+                                        <TextBox x:Name="TxtWiek" Grid.Column="2" ToolTip="Wiek"/>
+                                    </Grid>
+                                    <Button Content="Dodaj" Click="BtnDodaj_Click" Margin="0,5,0,0"/>
                                 </StackPanel>
-                                <StackPanel Grid.Column="1" Margin="5,0,0,0">
-                                    <TextBlock Text="Trudność (1-5):"/>
-                                    <TextBox x:Name="TxtTrudnosc" Margin="0,0,0,5"/>
+                            </GroupBox>
+
+                            <GroupBox Header="Transfer" Padding="5" Margin="0,0,0,10" BorderBrush="Blue">
+                                <StackPanel>
+                                    <ComboBox x:Name="CmbKlubyWybior" DisplayMemberPath="Nazwa" Margin="0,0,0,5"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Button Content="Przypisz" Click="BtnPrzypiszKlub_Click" Margin="0,0,2,0"/>
+                                        <Button Grid.Column="1" Content="Wypisz" Click="BtnWypiszKlub_Click" Margin="2,0,0,0"/>
+                                    </Grid>
                                 </StackPanel>
-                            </Grid>
+                            </GroupBox>
 
-                            <TextBlock Text="Punkty Bazowe:"/>
-                            <TextBox x:Name="TxtPunktyBazowe" Margin="0,0,0,10"/>
+                            <GroupBox Header="Wprowadź Wynik" Padding="5" BorderBrush="Green">
+                                <StackPanel>
+                                    <TextBlock Text="Wybierz zawody z bazy:" FontSize="10"/>
 
-                            <TextBlock Text="Data zawodów:"/>
-                            <DatePicker x:Name="DateDataZawodow" Margin="0,0,0,10" SelectedDate="{x:Static system:DateTime.Today}" xmlns:system="clr-namespace:System;assembly=mscorlib"/>
+                                    <ComboBox x:Name="CmbZawodyWybor" DisplayMemberPath="NazwaZawodow" 
+                                              Margin="0,0,0,5" SelectionChanged="CmbZawodyWybor_SelectionChanged"/>
 
-                            <Button Content="DODAJ WYNIK I PRZELICZ" Click="BtnDodajWynik_Click" Height="40" Background="#FF4CAF50" Foreground="White" FontWeight="Bold"/>
+                                    <TextBox x:Name="TxtNazwaZawodow" IsReadOnly="True" Background="#EEE" Margin="0,0,0,5"/>
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0" Margin="2">
+                                            <TextBlock Text="Miejsce"/>
+                                            <TextBox x:Name="TxtMiejsce"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="1" Margin="2">
+                                            <TextBlock Text="Trudność"/>
+                                            <TextBox x:Name="TxtTrudnosc" IsReadOnly="True" Background="#EEE"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="2" Margin="2">
+                                            <TextBlock Text="Pkt Baz"/>
+                                            <TextBox x:Name="TxtPunktyBazowe" IsReadOnly="True" Background="#EEE"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <DatePicker x:Name="DateDataZawodow" SelectedDate="{x:Static sys:DateTime.Today}" Margin="0,5,0,0"/>
+
+                                    <Button Content="Zatwierdź Wynik" Click="BtnDodajWynik_Click" Margin="0,10,0,0" Height="30" FontWeight="Bold" Background="#DFD"/>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <Border Background="#F5F5F5" Padding="10" Margin="0,15,0,0" CornerRadius="5">
+                                <StackPanel>
+                                    <TextBlock x:Name="TxtWybranyInfo" Text="Brak wyboru" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                    <ProgressBar x:Name="PasekPostepu" Height="15" Minimum="0" Maximum="20000" Margin="0,5"/>
+                                    <TextBlock x:Name="TxtPunktyPasek" Text="0 / 20000 pkt" HorizontalAlignment="Center" FontSize="10"/>
+                                    <TextBlock x:Name="TxtRangaStopka" Text="---" HorizontalAlignment="Center" Foreground="OrangeRed" FontWeight="Bold"/>
+                                </StackPanel>
+                            </Border>
+
                         </StackPanel>
-                    </GroupBox>
-
-                    <GroupBox Header="Transfery Klubowe" Padding="10">
-                        <StackPanel>
-                            <TextBlock Text="Nazwa Klubu:"/>
-                            <TextBox x:Name="TxtNazwaKlubu" Margin="0,0,0,10"/>
-
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="10"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Button Grid.Column="0" Content="Przypisz" Click="BtnPrzypiszKlub_Click" Height="25"/>
-                                <Button Grid.Column="2" Content="Wypisz" Click="BtnWypiszKlub_Click" Height="25"/>
-                            </Grid>
-                        </StackPanel>
-                    </GroupBox>
-                </StackPanel>
-            </ScrollViewer>
-        </Grid>
-
-        <Separator Grid.Row="1" Margin="0,10"/>
-
-        <Border Grid.Row="2" Background="#F0F0F0" Padding="15" CornerRadius="5">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-
-                <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,20,0">
-                    <TextBlock Text="ZAWODNIK" FontSize="10" Foreground="Gray"/>
-                    <TextBlock x:Name="TxtImieStopka" Text="Wybierz zawodnika" FontSize="16" FontWeight="Bold"/>
-                    <TextBlock x:Name="TxtWiekStopka" Text="-- lat" FontSize="12" Foreground="DarkSlateGray"/>
-                </StackPanel>
-
-                <Grid Grid.Column="1" VerticalAlignment="Center">
-                    <ProgressBar x:Name="PasekPostepu" Height="25" Minimum="0" Maximum="20000" Value="0" Foreground="#FF3399FF"/>
-                    <TextBlock x:Name="TxtPunktyPasek" Text="0 pkt" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black" FontWeight="SemiBold"/>
+                    </ScrollViewer>
                 </Grid>
+            </TabItem>
 
-                <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="20,0,0,0" MinWidth="100">
-                    <TextBlock Text="STATUS" FontSize="10" Foreground="Gray"/>
-                    <TextBlock x:Name="TxtRangaStopka" Text="---" FontWeight="Bold" Foreground="#FF5500" FontSize="14"/>
-                    <TextBlock x:Name="TxtDyscyplinaStopka" Text="---" FontWeight="SemiBold"/>
-                </StackPanel>
-            </Grid>
-        </Border>
+            <TabItem Header="BAZA KLUBÓW">
+                <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <DataGrid x:Name="GridKluby" AutoGenerateColumns="False" IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Nazwa" Binding="{Binding Nazwa}" Width="*"/>
+                            <DataGridTextColumn Header="Min. Punkty" Binding="{Binding MinimalnePunkty}"/>
+                            <DataGridTextColumn Header="Limit" Binding="{Binding LimitMiejsc}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                        <GroupBox Header="Dodaj Klub" Padding="10">
+                            <StackPanel>
+                                <TextBlock Text="Nazwa:"/>
+                                <TextBox x:Name="TxtKlubNazwa" Margin="0,0,0,5"/>
+                                <TextBlock Text="Min Punkty:"/>
+                                <TextBox x:Name="TxtKlubMinPkt" Text="0" Margin="0,0,0,5"/>
+                                <TextBlock Text="Limit miejsc:"/>
+                                <TextBox x:Name="TxtKlubLimit" Margin="0,0,0,5"/>
+                                <TextBlock Text="Max Wiek:"/>
+                                <TextBox x:Name="TxtKlubMaxWiek" Margin="0,0,0,10"/>
+                                <Button Content="Utwórz" Click="BtnUtworzKlub_Click"/>
+                            </StackPanel>
+                        </GroupBox>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="BAZA ZAWODÓW">
+                <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <DataGrid x:Name="GridZawody" AutoGenerateColumns="False" IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Nazwa Zawodów" Binding="{Binding NazwaZawodow}" Width="*"/>
+                            <DataGridTextColumn Header="Trudność" Binding="{Binding TrudnoscTrasy}"/>
+                            <DataGridTextColumn Header="Pkt Bazowe" Binding="{Binding PunktyBazowe}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                        <GroupBox Header="Zdefiniuj Szablon" Padding="10">
+                            <StackPanel>
+                                <TextBlock Text="Nazwa:"/>
+                                <TextBox x:Name="TxtDefZawodyNazwa" Margin="0,0,0,5"/>
+                                <TextBlock Text="Trudność (1-5):"/>
+                                <TextBox x:Name="TxtDefZawodyTrudnosc" Margin="0,0,0,5"/>
+                                <TextBlock Text="Punkty Bazowe:"/>
+                                <TextBox x:Name="TxtDefZawodyPkt" Margin="0,0,0,10"/>
+                                <Button Content="Dodaj do Bazy" Click="BtnUtworzZawody_Click"/>
+                            </StackPanel>
+                        </GroupBox>
+                        <TextBlock Text="* Definiujesz tu tylko parametry ogólne. Miejsce i Data będą podawane przy przypisywaniu wyniku." 
+                                   TextWrapping="Wrap" Foreground="Gray" FontSize="10" Margin="0,10,0,0"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+        </TabControl>
     </Grid>
 </Window>
