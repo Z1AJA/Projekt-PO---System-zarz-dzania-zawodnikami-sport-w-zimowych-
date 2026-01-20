@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\system_zawodnicy_zimowi.core\system_zawodnicy_zimowi.core.csproj" />
+    <ProjectReference Include="..\system_zawodnicy_zimowi.DATA\system_zawodnicy_zimowi.DATA.csproj" />
   </ItemGroup>
 
 </Project>
