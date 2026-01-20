@@ -9,6 +9,7 @@ namespace system_zawodnicy_zimowi.core.Domain.Entities
 {
     public class Snowboardzista : Zawodnik
     {
+        private Snowboardzista() { }
         public Snowboardzista(string imie, string nazwisko, int wiek) : base(imie, nazwisko, wiek, Dyscyplina.Snowboard) { }
 
         public override object Clone()
