@@ -13,7 +13,6 @@ namespace system_zawodnicy_zimowi.core.Domain.Entities
 {
     public abstract class Zawodnik : IEquatable<Zawodnik>, IComparable<Zawodnik>, ICloneable
     {
-        protected Zawodnik() { }
         private string _imie = "";
         private string _nazwisko = "";
 
