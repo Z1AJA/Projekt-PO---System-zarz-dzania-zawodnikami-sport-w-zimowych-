@@ -21,8 +21,7 @@ namespace system_zawodnicy_zimowi.Data
         // Konfiguracja połączenia (ConnectionString)
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            // Używamy lokalnej bazy SQL Server wbudowanej w Visual Studio
-            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=ZawodnicyZimowiDB;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=ZawodnicyZimowiDB_v2;Trusted_Connection=True;");
         }
 
         // Konfiguracja szczegółów (jak zapisać trudne pola)

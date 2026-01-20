@@ -164,37 +164,74 @@ namespace system_zawodnicy_zimowi
 
         private void BtnDodajWynik_Click(object sender, RoutedEventArgs e)
         {
+            // 1. Sprawdzenie danych wejściowych z GUI
             var uiZawodnik = ListaDatagrid.SelectedItem as Zawodnik;
-            if (uiZawodnik == null) { MessageBox.Show("Wybierz zawodnika."); return; }
+            if (uiZawodnik == null)
+            {
+                MessageBox.Show("Najpierw zaznacz zawodnika na liście po lewej.");
+                return;
+            }
+
+            if (CmbZawodyWybor.SelectedItem is not WynikZawodow szablon)
+            {
+                MessageBox.Show("Wybierz zawody z listy rozwijanej.");
+                return;
+            }
+
+            if (!int.TryParse(TxtMiejsce.Text, out int miejsce))
+            {
+                MessageBox.Show("Podaj miejsce (musi być liczbą).");
+                return;
+            }
+
+            DateTime data = DateDataZawodow.SelectedDate ?? DateTime.Now;
 
             try
             {
-                if (CmbZawodyWybor.SelectedItem is not WynikZawodow szablon)
-                { MessageBox.Show("Wybierz zawody."); return; }
-
-                if (!int.TryParse(TxtMiejsce.Text, out int miejsce)) { MessageBox.Show("Złe miejsce."); return; }
-                DateTime data = DateDataZawodow.SelectedDate ?? DateTime.Now;
-
+                // 2. Otwarcie "świeżego" połączenia do bazy
                 using (var context = new AppDbContext())
                 {
-                    // KLUCZOWE: Pobieramy zawodnika z bazy, żeby go zmodyfikować
-                    var dbZawodnik = context.Zawodnicy.Include(z => z.Wyniki)
+                    // Pobieramy zawodnika ŚWIEŻO z bazy, aby mieć pewność, że istnieje
+                    // Używamy "Include", żeby pobrać też jego listę wyników
+                    var dbZawodnik = context.Zawodnicy
+                                            .Include(z => z.Wyniki)
                                             .FirstOrDefault(z => z.Id == uiZawodnik.Id);
 
-                    if (dbZawodnik == null) { MessageBox.Show("Brak w bazie!"); return; }
+                    if (dbZawodnik == null)
+                    {
+                        MessageBox.Show("Błąd krytyczny: Nie znaleziono tego zawodnika w bazie danych. Spróbuj odświeżyć aplikację.");
+                        return;
+                    }
 
-                    var nowyWynik = new WynikZawodow(data, szablon.NazwaZawodow, miejsce, szablon.TrudnoscTrasy, szablon.PunktyBazowe);
+                    // 3. Tworzymy nowy wynik
+                    var nowyWynik = new WynikZawodow(
+                        data,
+                        szablon.NazwaZawodow,
+                        miejsce,
+                        szablon.TrudnoscTrasy,
+                        szablon.PunktyBazowe
+                    );
 
+                    // 4. Dodajemy wynik i przeliczamy punkty na obiekcie BAZODANOWYM
                     dbZawodnik.DodajWynik(nowyWynik);
                     _punktacjaService.Przelicz(dbZawodnik);
 
+                    // 5. Wymuszamy na Entity Frameworku zauważenie zmian
+                    context.Entry(dbZawodnik).State = EntityState.Modified;
+
+                    // 6. Zapis
                     context.SaveChanges();
                 }
 
+                // 7. Sukces - odświeżamy widok
                 OdswiezWszystko();
-                MessageBox.Show("Wynik dodany i punkty przeliczone!");
+                MessageBox.Show("Wynik został pomyślnie dodany!");
             }
-            catch (Exception ex) { MessageBox.Show("Błąd: " + ex.Message); }
+            catch (Exception ex)
+            {
+                // Wyświetlamy pełny błąd, żeby wiedzieć co poszło nie tak
+                MessageBox.Show($"Wystąpił błąd zapisu:\n{ex.Message}\n\n{ex.InnerException?.Message}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void CmbZawodyWybor_SelectionChanged(object sender, SelectionChangedEventArgs e)
