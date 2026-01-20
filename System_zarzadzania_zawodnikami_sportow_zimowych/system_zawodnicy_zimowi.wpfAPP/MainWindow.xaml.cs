@@ -59,26 +59,32 @@ namespace system_zawodnicy_zimowi
         {
             if (ListaDatagrid.SelectedItem is Zawodnik wybrany)
             {
-                // Aktualizacja tekstów
+                // 1. Podstawowe dane
                 TxtWybranyInfo.Text = $"{wybrany.Imie} {wybrany.Nazwisko}";
                 TxtImieStopka.Text = $"{wybrany.Imie} {wybrany.Nazwisko}";
+
+                // 2. NOWE DANE: Wiek i Ranga
+                TxtWiekStopka.Text = $"{wybrany.Wiek} lat";
+                TxtRangaStopka.Text = wybrany.Ranga.ToString().ToUpper(); // Wyświetlamy rangę dużymi literami
+
+                // 3. Reszta danych
                 TxtDyscyplinaStopka.Text = wybrany.Dyscyplina.ToString();
                 TxtPunktyPasek.Text = $"{wybrany.Punkty} / 1000 pkt";
 
-                // Wypełnienie pola klubu nazwą
                 if (!string.IsNullOrEmpty(wybrany.KlubNazwa))
                     TxtNazwaKlubu.Text = wybrany.KlubNazwa;
                 else
                     TxtNazwaKlubu.Clear();
 
-                // Animacja Progress Bara
                 AnimujPasekPostepu(wybrany.Punkty);
             }
             else
             {
-                // Resetowanie widoku gdy nic nie jest wybrane
+                // Resetowanie widoku (gdy odznaczono)
                 TxtWybranyInfo.Text = "-- brak --";
                 TxtImieStopka.Text = "Wybierz zawodnika";
+                TxtWiekStopka.Text = "-- lat";         // Reset wieku
+                TxtRangaStopka.Text = "---";           // Reset rangi
                 TxtDyscyplinaStopka.Text = "---";
                 TxtPunktyPasek.Text = "0 pkt";
                 PasekPostepu.Value = 0;

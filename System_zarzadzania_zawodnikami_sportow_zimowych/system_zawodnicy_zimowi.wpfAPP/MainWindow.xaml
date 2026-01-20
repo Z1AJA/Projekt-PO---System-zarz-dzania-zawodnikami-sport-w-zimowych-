@@ -19,14 +19,16 @@
 
             <GroupBox Header="Baza Zawodników" Grid.Column="0" Margin="0,0,10,0">
                 <DataGrid x:Name="ListaDatagrid" 
-                          AutoGenerateColumns="False" 
-                          IsReadOnly="True"
-                          SelectionMode="Single"
-                          SelectionChanged="ListaDatagrid_SelectionChanged"
-                          BorderThickness="0">
+                    AutoGenerateColumns="False" 
+                    IsReadOnly="True"
+                    SelectionMode="Single"
+                    SelectionChanged="ListaDatagrid_SelectionChanged"
+                    BorderThickness="0">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Imię" Binding="{Binding Imie}" Width="*"/>
                         <DataGridTextColumn Header="Nazwisko" Binding="{Binding Nazwisko}" Width="*"/>
+                        <DataGridTextColumn Header="Wiek" Binding="{Binding Wiek}" Width="50"/>
+                        <DataGridTextColumn Header="Ranga" Binding="{Binding Ranga}" Width="80"/>
                         <DataGridTextColumn Header="Dyscyplina" Binding="{Binding Dyscyplina}" Width="120"/>
                         <DataGridTextColumn Header="Klub" Binding="{Binding KlubNazwa}" Width="100"/>
                         <DataGridTextColumn Header="Punkty" Binding="{Binding Punkty}" Width="60" FontWeight="Bold"/>
@@ -101,8 +103,9 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,20,0">
-                    <TextBlock Text="RANKING PUNKTOWY" FontSize="10" Foreground="Gray"/>
+                    <TextBlock Text="ZAWODNIK" FontSize="10" Foreground="Gray"/>
                     <TextBlock x:Name="TxtImieStopka" Text="Wybierz zawodnika" FontSize="16" FontWeight="Bold"/>
+                    <TextBlock x:Name="TxtWiekStopka" Text="-- lat" FontSize="12" Foreground="DarkSlateGray"/>
                 </StackPanel>
 
                 <Grid Grid.Column="1" VerticalAlignment="Center">
@@ -110,8 +113,9 @@
                     <TextBlock x:Name="TxtPunktyPasek" Text="0 pkt" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black" FontWeight="SemiBold"/>
                 </Grid>
 
-                <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="20,0,0,0">
-                    <TextBlock Text="Dyscyplina:" FontSize="10" Foreground="Gray"/>
+                <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="20,0,0,0" MinWidth="100">
+                    <TextBlock Text="STATUS" FontSize="10" Foreground="Gray"/>
+                    <TextBlock x:Name="TxtRangaStopka" Text="---" FontWeight="Bold" Foreground="#FF5500"/>
                     <TextBlock x:Name="TxtDyscyplinaStopka" Text="---" FontWeight="SemiBold"/>
                 </StackPanel>
             </Grid>
