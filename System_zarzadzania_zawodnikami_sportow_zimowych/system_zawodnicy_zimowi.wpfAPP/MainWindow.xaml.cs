@@ -6,7 +6,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
-// PONIŻEJ POPRAWIONE USINGI:
 using system_zawodnicy_zimowi.core.Domain.Entities;
 using system_zawodnicy_zimowi.core.Domain.Enums;
 using system_zawodnicy_zimowi.core.Services;
@@ -16,13 +15,10 @@ namespace system_zawodnicy_zimowi
 {
     public partial class MainWindow : Window
     {
-        // Kontekst bazy danych
-        private readonly AppDbContext _context = new AppDbContext();
-        
-        // Serwis punktacji
+        // Serwis punktacji (logika biznesowa)
         private readonly PunktacjaService _punktacjaService = new PunktacjaService();
 
-        // Kolekcje
+        // Kolekcje podpięte pod UI
         public ObservableCollection<Zawodnik> Zawodnicy { get; set; } = new ObservableCollection<Zawodnik>();
         public ObservableCollection<KlubSportowy> Kluby { get; set; } = new ObservableCollection<KlubSportowy>();
         public ObservableCollection<WynikZawodow> BazaZawodow { get; set; } = new ObservableCollection<WynikZawodow>();
@@ -31,154 +27,172 @@ namespace system_zawodnicy_zimowi
         {
             InitializeComponent();
 
-            try 
+            try
             {
-                // 1. Inicjalizacja bazy
-                _context.Database.EnsureCreated();
-                
-                // 2. Ładowanie danych
-                ZaladujDaneZBazy();
+                // Inicjalizacja bazy przy starcie
+                using (var context = new AppDbContext())
+                {
+                    context.Database.EnsureCreated();
+                }
+
+                // Załaduj wszystko
+                OdswiezWszystko();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Błąd bazy danych: " + ex.Message + "\n\nSpróbuj usunąć foldery bin i obj z katalogu projektu.");
+                MessageBox.Show("Błąd startu: " + ex.Message);
             }
 
-            // 3. Przypisanie do GUI
+            // Przypisanie do GUI
             ListaDatagrid.ItemsSource = Zawodnicy;
             GridKluby.ItemsSource = Kluby;
             CmbKlubyWybior.ItemsSource = Kluby;
             GridZawody.ItemsSource = BazaZawodow;
             CmbZawodyWybor.ItemsSource = BazaZawodow;
 
-            // Obsługa zdarzenia zmiany rangi
-            _punktacjaService.RangaZmieniona += (zawodnik, staraRanga, nowaRanga) => 
-            {
-                MessageBox.Show(
-                    $"GRATULACJE!\nZawodnik {zawodnik.Imie} {zawodnik.Nazwisko} awansował!\n" +
-                    $"{staraRanga} -> {nowaRanga}", 
-                    "Awans", MessageBoxButton.OK, MessageBoxImage.Information);
-            };
+            _punktacjaService.RangaZmieniona += (z, s, n) =>
+                MessageBox.Show($"AWANS!\n{z.Imie} {z.Nazwisko}: {s} -> {n}", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void ZaladujDaneZBazy()
+        // Ta metoda pobiera świeże dane z bazy i wrzuca do GUI
+        private void OdswiezWszystko()
         {
-            // Ładowanie z Include (wyniki zawodnika)
-            _context.Zawodnicy.Include(z => z.Wyniki).Load();
-            Zawodnicy = _context.Zawodnicy.Local.ToObservableCollection();
+            using (var context = new AppDbContext())
+            {
+                // 1. Zawodnicy
+                var listaZ = context.Zawodnicy.Include(z => z.Wyniki).ToList();
+                Zawodnicy.Clear();
+                foreach (var z in listaZ) Zawodnicy.Add(z);
 
-            _context.Kluby.Load();
-            Kluby = _context.Kluby.Local.ToObservableCollection();
+                // 2. Kluby
+                var listaK = context.Kluby.ToList();
+                Kluby.Clear();
+                foreach (var k in listaK) Kluby.Add(k);
 
-            _context.Wyniki.Load();
-            
-            // Filtrowanie szablonów (wyniki bez przypisanego zawodnika)
-            var wszystkieWyniki = _context.Wyniki.Local.ToList();
-            var idsWynikowGraczy = Zawodnicy.SelectMany(z => z.Wyniki).Select(w => w.Id).ToHashSet();
-            
-            var szablony = wszystkieWyniki.Where(w => !idsWynikowGraczy.Contains(w.Id)).ToList();
-            BazaZawodow = new ObservableCollection<WynikZawodow>(szablony);
+                // 3. Szablony
+                var wszystkieWyniki = context.Wyniki.ToList();
+                // Pobieramy ID wyników przypisanych do graczy
+                var idsWynikowGraczy = listaZ.SelectMany(z => z.Wyniki).Select(w => w.Id).ToHashSet();
+                // Szablony to te, które NIE są u graczy
+                var szablony = wszystkieWyniki.Where(w => !idsWynikowGraczy.Contains(w.Id)).ToList();
+
+                BazaZawodow.Clear();
+                foreach (var s in szablony) BazaZawodow.Add(s);
+            }
+
+            ListaDatagrid.Items.Refresh();
         }
 
         // --- ZAWODNICY ---
+
         private void BtnDodaj_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                if (!int.TryParse(TxtWiek.Text, out int wiek))
-                {
-                    MessageBox.Show("Podaj poprawny wiek.");
-                    return;
-                }
+                if (!int.TryParse(TxtWiek.Text, out int wiek)) { MessageBox.Show("Zły wiek"); return; }
+                if (CmbTyp.SelectedItem is not ComboBoxItem item) return;
 
-                if (CmbTyp.SelectedItem is not ComboBoxItem selectedItem) return;
-                string typ = selectedItem.Content?.ToString() ?? "";
+                string typ = item.Content.ToString() ?? "";
 
-                Zawodnik nowyZawodnik = typ.Contains("Narciarz") 
-                    ? new NarciarzAlpejski(TxtImie.Text, TxtNazwisko.Text, wiek) 
+                Zawodnik z = typ.Contains("Narciarz")
+                    ? new NarciarzAlpejski(TxtImie.Text, TxtNazwisko.Text, wiek)
                     : new Snowboardzista(TxtImie.Text, TxtNazwisko.Text, wiek);
 
-                Zawodnicy.Add(nowyZawodnik);
-                _context.SaveChanges();
+                using (var context = new AppDbContext())
+                {
+                    context.Zawodnicy.Add(z);
+                    context.SaveChanges();
+                }
 
+                OdswiezWszystko();
                 TxtImie.Clear(); TxtNazwisko.Clear(); TxtWiek.Clear();
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Błąd zapisu: " + ex.Message);
-            }
+            catch (Exception ex) { MessageBox.Show("Błąd: " + ex.Message); }
         }
 
         private void BtnPrzypiszKlub_Click(object sender, RoutedEventArgs e)
         {
-            var zawodnik = ListaDatagrid.SelectedItem as Zawodnik;
-            var klub = CmbKlubyWybior.SelectedItem as KlubSportowy;
+            var uiZawodnik = ListaDatagrid.SelectedItem as Zawodnik;
+            var uiKlub = CmbKlubyWybior.SelectedItem as KlubSportowy;
 
-            if (zawodnik == null || klub == null)
-            {
-                MessageBox.Show("Wybierz zawodnika i klub.");
-                return;
-            }
+            if (uiZawodnik == null || uiKlub == null) { MessageBox.Show("Wybierz parę."); return; }
 
             try
             {
-                if (!klub.PasujeDo(zawodnik))
+                using (var context = new AppDbContext())
                 {
-                    MessageBox.Show($"Klub odrzucił zawodnika (wymagane pkt: {klub.MinimalnePunkty})");
-                    return;
-                }
+                    // Pobieramy świeże wersje z bazy po ID
+                    var dbZawodnik = context.Zawodnicy.FirstOrDefault(x => x.Id == uiZawodnik.Id);
+                    var dbKlub = context.Kluby.FirstOrDefault(x => x.Id == uiKlub.Id);
 
-                zawodnik.PrzypiszKlub(klub.Id, klub.Nazwa);
-                _context.SaveChanges();
-                OdswiezWidok(zawodnik);
-                MessageBox.Show($"Przypisano do: {klub.Nazwa}");
+                    if (dbZawodnik == null || dbKlub == null) return;
+
+                    if (!dbKlub.PasujeDo(dbZawodnik))
+                    {
+                        MessageBox.Show($"Klub wymaga min. {dbKlub.MinimalnePunkty} pkt.");
+                        return;
+                    }
+
+                    dbZawodnik.PrzypiszKlub(dbKlub.Id, dbKlub.Nazwa);
+                    context.SaveChanges();
+                }
+                OdswiezWszystko();
+                MessageBox.Show("Przypisano!");
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
 
         private void BtnWypiszKlub_Click(object sender, RoutedEventArgs e)
         {
-            if (ListaDatagrid.SelectedItem is Zawodnik z)
+            var uiZawodnik = ListaDatagrid.SelectedItem as Zawodnik;
+            if (uiZawodnik == null) return;
+
+            using (var context = new AppDbContext())
             {
-                z.WypiszZKlubu();
-                _context.SaveChanges();
-                OdswiezWidok(z);
-                MessageBox.Show("Wypisano z klubu.");
+                var dbZawodnik = context.Zawodnicy.FirstOrDefault(x => x.Id == uiZawodnik.Id);
+                if (dbZawodnik != null)
+                {
+                    dbZawodnik.WypiszZKlubu();
+                    context.SaveChanges();
+                }
             }
-            else MessageBox.Show("Wybierz zawodnika.");
+            OdswiezWszystko();
+            MessageBox.Show("Wypisano.");
         }
 
-        // --- WYNIKI ---
+        // --- WYNIKI (TU BYŁ GŁÓWNY PROBLEM) ---
+
         private void BtnDodajWynik_Click(object sender, RoutedEventArgs e)
         {
-            var zawodnik = ListaDatagrid.SelectedItem as Zawodnik;
-            if (zawodnik == null) { MessageBox.Show("Wybierz zawodnika."); return; }
+            var uiZawodnik = ListaDatagrid.SelectedItem as Zawodnik;
+            if (uiZawodnik == null) { MessageBox.Show("Wybierz zawodnika."); return; }
 
             try
             {
-                if (CmbZawodyWybor.SelectedItem is not WynikZawodow szablon) 
-                {
-                    MessageBox.Show("Wybierz zawody z listy.");
-                    return;
-                }
+                if (CmbZawodyWybor.SelectedItem is not WynikZawodow szablon)
+                { MessageBox.Show("Wybierz zawody."); return; }
 
-                if (!int.TryParse(TxtMiejsce.Text, out int miejsce)) 
-                {
-                    MessageBox.Show("Podaj miejsce.");
-                    return;
-                }
-
+                if (!int.TryParse(TxtMiejsce.Text, out int miejsce)) { MessageBox.Show("Złe miejsce."); return; }
                 DateTime data = DateDataZawodow.SelectedDate ?? DateTime.Now;
 
-                var nowyWynik = new WynikZawodow(data, szablon.NazwaZawodow, miejsce, szablon.TrudnoscTrasy, szablon.PunktyBazowe);
+                using (var context = new AppDbContext())
+                {
+                    // KLUCZOWE: Pobieramy zawodnika z bazy, żeby go zmodyfikować
+                    var dbZawodnik = context.Zawodnicy.Include(z => z.Wyniki)
+                                            .FirstOrDefault(z => z.Id == uiZawodnik.Id);
 
-                zawodnik.DodajWynik(nowyWynik);
-                _punktacjaService.Przelicz(zawodnik);
-                
-                _context.SaveChanges();
-                
-                OdswiezWidok(zawodnik);
-                MessageBox.Show("Wynik dodany!");
+                    if (dbZawodnik == null) { MessageBox.Show("Brak w bazie!"); return; }
+
+                    var nowyWynik = new WynikZawodow(data, szablon.NazwaZawodow, miejsce, szablon.TrudnoscTrasy, szablon.PunktyBazowe);
+
+                    dbZawodnik.DodajWynik(nowyWynik);
+                    _punktacjaService.Przelicz(dbZawodnik);
+
+                    context.SaveChanges();
+                }
+
+                OdswiezWszystko();
+                MessageBox.Show("Wynik dodany i punkty przeliczone!");
             }
             catch (Exception ex) { MessageBox.Show("Błąd: " + ex.Message); }
         }
@@ -202,17 +216,19 @@ namespace system_zawodnicy_zimowi
                 int minPkt = int.TryParse(TxtKlubMinPkt.Text, out int mp) ? mp : 0;
                 int? limit = int.TryParse(TxtKlubLimit.Text, out int l) ? l : null;
                 int? maxWiek = int.TryParse(TxtKlubMaxWiek.Text, out int mw) ? mw : null;
-
                 var dyscypliny = Enum.GetValues(typeof(Dyscyplina)).Cast<Dyscyplina>();
-                
-                var klub = new KlubSportowy(nazwa, minPkt, maxWiek, dyscypliny, limit);
-                
-                Kluby.Add(klub);
-                _context.SaveChanges();
-                MessageBox.Show("Klub utworzony!");
+
+                using (var context = new AppDbContext())
+                {
+                    var k = new KlubSportowy(nazwa, minPkt, maxWiek, dyscypliny, limit);
+                    context.Kluby.Add(k);
+                    context.SaveChanges();
+                }
+                OdswiezWszystko();
                 TxtKlubNazwa.Clear();
+                MessageBox.Show("Klub dodany.");
             }
-            catch (Exception ex) { MessageBox.Show("Błąd: " + ex.Message); }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
 
         // --- SZABLONY ---
@@ -224,28 +240,27 @@ namespace system_zawodnicy_zimowi
                 int trudnosc = int.TryParse(TxtDefZawodyTrudnosc.Text, out int t) ? t : 1;
                 int pkt = int.TryParse(TxtDefZawodyPkt.Text, out int p) ? p : 0;
 
-                var szablon = new WynikZawodow(DateTime.Now, nazwa, 1, trudnosc, pkt);
-
-                _context.Wyniki.Add(szablon);
-                _context.SaveChanges();
-                BazaZawodow.Add(szablon);
-
-                MessageBox.Show("Szablon dodany!");
+                using (var context = new AppDbContext())
+                {
+                    var szablon = new WynikZawodow(DateTime.Now, nazwa, 1, trudnosc, pkt);
+                    context.Wyniki.Add(szablon);
+                    context.SaveChanges();
+                }
+                OdswiezWszystko();
                 TxtDefZawodyNazwa.Clear();
+                MessageBox.Show("Szablon dodany.");
             }
-            catch (Exception ex) { MessageBox.Show("Błąd: " + ex.Message); }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
 
         // --- WIDOK ---
         private void ListaDatagrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            OdswiezWidok(ListaDatagrid.SelectedItem as Zawodnik);
+            OdswiezPanelDolny(ListaDatagrid.SelectedItem as Zawodnik);
         }
 
-        private void OdswiezWidok(Zawodnik? z)
+        private void OdswiezPanelDolny(Zawodnik? z)
         {
-            ListaDatagrid.Items.Refresh();
-
             if (z != null)
             {
                 TxtWybranyInfo.Text = $"{z.Imie} {z.Nazwisko}";
@@ -260,14 +275,12 @@ namespace system_zawodnicy_zimowi
             {
                 TxtWybranyInfo.Text = "Brak wyboru";
                 TxtRangaStopka.Text = "---";
-                TxtPunktyPasek.Text = "0 / 20000";
                 PasekPostepu.Value = 0;
             }
         }
 
         protected override void OnClosed(EventArgs e)
         {
-            _context.Dispose();
             base.OnClosed(e);
         }
     }
