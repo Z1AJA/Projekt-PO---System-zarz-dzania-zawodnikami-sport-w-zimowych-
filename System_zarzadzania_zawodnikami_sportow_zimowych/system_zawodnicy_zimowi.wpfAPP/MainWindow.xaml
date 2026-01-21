@@ -34,7 +34,7 @@
                             <GroupBox Header="Nowy Zawodnik" Padding="10" Margin="0,0,0,10">
                                 <StackPanel>
                                     <TextBlock Text="Typ zawodnika:" FontWeight="SemiBold" Margin="0,0,0,2"/>
-                                    <ComboBox x:Name="CmbTyp" SelectedIndex="0" Margin="0,0,0,10">
+                                    <ComboBox x:Name="CmbTyp" SelectedIndex="0" Margin="0,0,0,10" SelectionChanged="CmbTyp_SelectionChanged">
                                         <ComboBoxItem Content="Narciarz Alpejski"/>
                                         <ComboBoxItem Content="Snowboardzista"/>
                                     </ComboBox>
@@ -53,7 +53,7 @@
 
                                         <StackPanel Grid.Column="1" Margin="0,0,5,0">
                                             <TextBlock Text="Nazwisko:" Foreground="Gray"/>
-                                            <TextBox x:Name="TxtNazwisko"/>
+                                            <TextBox x:Name="TxtNazwisko" TextChanged="TxtNazwisko_TextChanged"/>
                                         </StackPanel>
 
                                         <StackPanel Grid.Column="2">

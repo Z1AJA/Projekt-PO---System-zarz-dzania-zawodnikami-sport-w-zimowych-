@@ -7,7 +7,23 @@ namespace system_zawodnicy_zimowi.Data
 {
     public class ManagerDanych
     {
-        // Metoda dodająca przykładowe dane (użyj tego raz, żeby wypełnić bazę)
+        public void DodajWynikDoBazy(Guid zawodnikId, WynikZawodow nowyWynik)
+        {
+            using (var context = new AppDbContext())
+            {
+                var zawodnik = context.Zawodnicy
+                                      .Include(z => z.Wyniki)
+                                      .FirstOrDefault(z => z.Id == zawodnikId);
+
+                if (zawodnik != null)
+                {
+                 
+                    zawodnik.DodajWynik(nowyWynik);
+                    context.SaveChanges();
+                }
+            }
+        }
+       
         public void InicjalizujBaze()
         {
             using (var context = new AppDbContext())

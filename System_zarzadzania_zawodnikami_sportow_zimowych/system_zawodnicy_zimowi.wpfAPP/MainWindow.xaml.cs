@@ -15,10 +15,9 @@ namespace system_zawodnicy_zimowi
 {
     public partial class MainWindow : Window
     {
-        // Serwis punktacji (logika biznesowa)
+        
         private readonly PunktacjaService _punktacjaService = new PunktacjaService();
 
-        // Kolekcje podpięte pod UI
         public ObservableCollection<Zawodnik> Zawodnicy { get; set; } = new ObservableCollection<Zawodnik>();
         public ObservableCollection<KlubSportowy> Kluby { get; set; } = new ObservableCollection<KlubSportowy>();
         public ObservableCollection<WynikZawodow> BazaZawodow { get; set; } = new ObservableCollection<WynikZawodow>();
@@ -164,7 +163,7 @@ namespace system_zawodnicy_zimowi
 
         private void BtnDodajWynik_Click(object sender, RoutedEventArgs e)
         {
-            // 1. Sprawdzenie danych wejściowych z GUI
+            // 1. Sprawdzenie GUI
             var uiZawodnik = ListaDatagrid.SelectedItem as Zawodnik;
             if (uiZawodnik == null)
             {
@@ -188,18 +187,16 @@ namespace system_zawodnicy_zimowi
 
             try
             {
-                // 2. Otwarcie "świeżego" połączenia do bazy
                 using (var context = new AppDbContext())
                 {
-                    // Pobieramy zawodnika ŚWIEŻO z bazy, aby mieć pewność, że istnieje
-                    // Używamy "Include", żeby pobrać też jego listę wyników
+                    // 2. Pobieramy zawodnika z bazy (po ID)
                     var dbZawodnik = context.Zawodnicy
-                                            .Include(z => z.Wyniki)
+                                            .Include(z => z.Wyniki) // Ważne!
                                             .FirstOrDefault(z => z.Id == uiZawodnik.Id);
 
                     if (dbZawodnik == null)
                     {
-                        MessageBox.Show("Błąd krytyczny: Nie znaleziono tego zawodnika w bazie danych. Spróbuj odświeżyć aplikację.");
+                        MessageBox.Show("Nie znaleziono zawodnika w bazie! Odśwież listę.");
                         return;
                     }
 
@@ -212,25 +209,23 @@ namespace system_zawodnicy_zimowi
                         szablon.PunktyBazowe
                     );
 
-                    // 4. Dodajemy wynik i przeliczamy punkty na obiekcie BAZODANOWYM
+                    // 4. Modyfikujemy obiekt (EF to śledzi automatycznie!)
                     dbZawodnik.DodajWynik(nowyWynik);
                     _punktacjaService.Przelicz(dbZawodnik);
 
-                    // 5. Wymuszamy na Entity Frameworku zauważenie zmian
-                    context.Entry(dbZawodnik).State = EntityState.Modified;
+                    // USUŃ TĘ LINIJKĘ: context.Entry(dbZawodnik).State = EntityState.Modified; 
+                    // Ona psuła zapis! EF sam wie, że coś się zmieniło.
 
-                    // 6. Zapis
+                    // 5. Zapisujemy
                     context.SaveChanges();
                 }
 
-                // 7. Sukces - odświeżamy widok
                 OdswiezWszystko();
                 MessageBox.Show("Wynik został pomyślnie dodany!");
             }
             catch (Exception ex)
             {
-                // Wyświetlamy pełny błąd, żeby wiedzieć co poszło nie tak
-                MessageBox.Show($"Wystąpił błąd zapisu:\n{ex.Message}\n\n{ex.InnerException?.Message}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Message: {ex.Message}\n\nInner: {ex.InnerException?.Message}\n\nStackTrace: {ex.StackTrace}");
             }
         }
 
@@ -268,7 +263,7 @@ namespace system_zawodnicy_zimowi
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
 
-        // --- SZABLONY ---
+        
         private void BtnUtworzZawody_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -290,7 +285,7 @@ namespace system_zawodnicy_zimowi
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
 
-        // --- WIDOK ---
+       
         private void ListaDatagrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             OdswiezPanelDolny(ListaDatagrid.SelectedItem as Zawodnik);
@@ -319,6 +314,16 @@ namespace system_zawodnicy_zimowi
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
+        }
+
+        private void CmbTyp_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void TxtNazwisko_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
         }
     }
 }
