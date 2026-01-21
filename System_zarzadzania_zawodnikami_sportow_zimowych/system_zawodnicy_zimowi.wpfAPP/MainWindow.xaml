@@ -84,7 +84,7 @@
                             <GroupBox Header="Wprowadź Wynik" Padding="5" BorderBrush="Green">
                                 <StackPanel>
                                     <TextBlock Text="Wybierz zawody z bazy:" FontSize="10"/>
-                                    <ComboBox x:Name="CmbZawodyWybor" DisplayMemberPath="NazwaZawodow" 
+                                    <ComboBox x:Name="CmbZawodyWybor" DisplayMemberPath="Nazwa" 
                                               Margin="0,0,0,5" SelectionChanged="CmbZawodyWybor_SelectionChanged"/>
 
                                     <TextBox x:Name="TxtNazwaZawodow" IsReadOnly="True" Background="#EEE" Margin="0,0,0,5"/>
@@ -167,10 +167,10 @@
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
 
-                    <DataGrid x:Name="GridZawody" AutoGenerateColumns="False" IsReadOnly="True">
+                    <DataGrid x:Name="GridZawody" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="GridZawody_SelectionChanged">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Nazwa Zawodów" Binding="{Binding NazwaZawodow}" Width="*"/>
-                            <DataGridTextColumn Header="Trudność" Binding="{Binding TrudnoscTrasy}"/>
+                            <DataGridTextColumn Header="Nazwa Zawodów" Binding="{Binding Nazwa}" Width="*"/>
+                            <DataGridTextColumn Header="Trudność" Binding="{Binding Trudnosc}"/>
                             <DataGridTextColumn Header="Pkt Bazowe" Binding="{Binding PunktyBazowe}"/>
                         </DataGrid.Columns>
                     </DataGrid>

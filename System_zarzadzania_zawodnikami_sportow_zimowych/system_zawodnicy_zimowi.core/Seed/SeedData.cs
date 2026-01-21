@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using system_zawodnicy_zimowi.core.Domain.Entities;
 using system_zawodnicy_zimowi.core.Domain.Enums;
-
-
-//Przykladowe dane do latwiejszych testow
 
 namespace system_zawodnicy_zimowi.core.Seed
 {
@@ -54,23 +48,51 @@ namespace system_zawodnicy_zimowi.core.Seed
             var z3 = new Snowboardzista("Piotr", "Zieliński", 20);
             var z4 = new Snowboardzista("Kaja", "Wójcik", 27);
 
-            
-            //wygenerowane wyniki zawodow
+            // --- 1. TWORZYMY RODZAJE ZAWODÓW (SZABLONY) ---
+            // Musimy je stworzyć jako obiekty, aby przekazać je do wyników
+            var rWinterA = new RodzajZawodow("Puchar Winter A", 3, 450);
+            var rWinterB = new RodzajZawodow("Puchar Winter B", 4, 500);
 
-            z1.DodajWynik(new WynikZawodow(DateTime.Now.AddDays(-30), "Puchar Winter A", 12, 3, 450));
-            z1.DodajWynik(new WynikZawodow(DateTime.Now.AddDays(-10), "Puchar Winter B", 8, 4, 500));
+            var rAlpine = new RodzajZawodow("Alpine Cup", 3, 380);
+            var rAlpineFinal = new RodzajZawodow("Alpine Cup Final", 4, 420);
 
-            z2.DodajWynik(new WynikZawodow(DateTime.Now.AddDays(-20), "Alpine Cup", 25, 3, 380));
-            z2.DodajWynik(new WynikZawodow(DateTime.Now.AddDays(-7), "Alpine Cup Final", 14, 4, 420));
+            var rSnowJam = new RodzajZawodow("Snow Jam", 4, 520);
+            var rSnowJam2 = new RodzajZawodow("Snow Jam 2", 5, 600);
 
-            z3.DodajWynik(new WynikZawodow(DateTime.Now.AddDays(-18), "Snow Jam", 6, 4, 520));
-            z3.DodajWynik(new WynikZawodow(DateTime.Now.AddDays(-5), "Snow Jam 2", 3, 5, 600));
+            var rRiders = new RodzajZawodow("Riders Open", 2, 260);
+            var rRidersFinal = new RodzajZawodow("Riders Open Final", 3, 330);
 
-            z4.DodajWynik(new WynikZawodow(DateTime.Now.AddDays(-12), "Riders Open", 40, 2, 260));
-            z4.DodajWynik(new WynikZawodow(DateTime.Now.AddDays(-3), "Riders Open Final", 22, 3, 330));
+            // --- 2. DODAJEMY WYNIKI (UŻYWAJĄC NOWEGO KONSTRUKTORA) ---
+
+            // Jan Kowalski
+            z1.DodajWynik(new WynikZawodow(DateTime.Now.AddDays(-30), 12, rWinterA));
+            z1.DodajWynik(new WynikZawodow(DateTime.Now.AddDays(-10), 8, rWinterB));
+
+            // Anna Nowak
+            z2.DodajWynik(new WynikZawodow(DateTime.Now.AddDays(-20), 25, rAlpine));
+            z2.DodajWynik(new WynikZawodow(DateTime.Now.AddDays(-7), 14, rAlpineFinal));
+
+            // Piotr Zieliński
+            z3.DodajWynik(new WynikZawodow(DateTime.Now.AddDays(-18), 6, rSnowJam));
+            z3.DodajWynik(new WynikZawodow(DateTime.Now.AddDays(-5), 3, rSnowJam2));
+
+            // Kaja Wójcik
+            z4.DodajWynik(new WynikZawodow(DateTime.Now.AddDays(-12), 40, rRiders));
+            z4.DodajWynik(new WynikZawodow(DateTime.Now.AddDays(-3), 22, rRidersFinal));
 
             return new List<Zawodnik> { z1, z2, z3, z4 };
         }
 
+        // Opcjonalnie: Metoda pomocnicza, gdybyś chciał pobrać same szablony do bazy
+        public static List<RodzajZawodow> PrzykladoweRodzaje()
+        {
+            return new List<RodzajZawodow>
+             {
+                 new RodzajZawodow("Puchar Winter A", 3, 450),
+                 new RodzajZawodow("Puchar Winter B", 4, 500),
+                 new RodzajZawodow("Alpine Cup", 3, 380),
+                 new RodzajZawodow("Snow Jam", 4, 520)
+             };
+        }
     }
 }

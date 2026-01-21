@@ -109,12 +109,19 @@ namespace system_zawodnicy_zimowi.core.Storage
             if (z.KlubId is not null && !string.IsNullOrWhiteSpace(z.KlubNazwa))
                 zawodnik.PrzypiszKlub(z.KlubId.Value, z.KlubNazwa!);
 
-            // wwyniki
+            // wyniki
             foreach (var w in z.Wyniki)
             {
-                var wynik = new WynikZawodow(w.Data, w.NazwaZawodow, w.Miejsce, w.TrudnoscTrasy, w.PunktyBazowe);
+                var rodzajTymczasowy = new RodzajZawodow(w.NazwaZawodow, w.TrudnoscTrasy, w.PunktyBazowe);
+
+                
+                var wynik = new WynikZawodow(w.Data, w.Miejsce, rodzajTymczasowy);
+
+                
                 wynik.Id = w.Id;
-                zawodnik.DodajWynik(wynik);
+
+               
+                zawodnik.DodajWynik(wynik); ;
             }
 
             return zawodnik;

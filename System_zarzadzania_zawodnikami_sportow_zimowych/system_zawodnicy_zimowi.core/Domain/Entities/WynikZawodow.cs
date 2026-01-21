@@ -8,41 +8,41 @@ using system_zawodnicy_zimowi.core.Domain.Exceptions;
 
 namespace system_zawodnicy_zimowi.core.Domain.Entities
 {
+    
     public class WynikZawodow
     {
+       
         private WynikZawodow() { }
-        private string _nazwaZawodow = "";
 
         public Guid Id { get; internal set; } = Guid.NewGuid();
 
         public DateTime Data { get; private set; }
-        public string NazwaZawodow
-        {
-            get => _nazwaZawodow; 
-            private set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new DomainValidationException("Nazwa zawodów nie może być pusta.");
-                var t = value.Trim();
-                if (t.Length < 3 || t.Length > 80)
-                    throw new DomainValidationException("Nazwa zawodów musi mieć 3–80 znaków.");
-                _nazwaZawodow = t;
-            }
-        }
-
         public int Miejsce { get; private set; }
 
-        public int TrudnoscTrasy { get; private set; }
+        public Guid RodzajZawodowId { get; private set; }
+        public virtual RodzajZawodow RodzajZawodow { get; private set; }
 
-        public int PunktyBazowe { get; private set; }
+    
+        public string NazwaHistoryczna { get; private set; }
+        public int TrudnoscHistoryczna { get; private set; }
+        public int PunktyBazoweHistoryczne { get; private set; }
 
-        public WynikZawodow(DateTime data, string nazwaZawodow, int miejsce, int trudnoscTrasy, int punktyBazowe)
+        public WynikZawodow(DateTime data, int miejsce, RodzajZawodow rodzaj)
         {
+            if (rodzaj == null)
+                throw new DomainValidationException("Nie wybrano rodzaju zawodów.");
+
             SetData(data);
-            NazwaZawodow = nazwaZawodow;
             SetMiejsce(miejsce);
-            SetTrudnosc(trudnoscTrasy);
-            SetPunktyBazowe(punktyBazowe);
+
+           
+            RodzajZawodow = rodzaj;
+            RodzajZawodowId = rodzaj.Id;
+
+            
+            NazwaHistoryczna = rodzaj.Nazwa;
+            TrudnoscHistoryczna = rodzaj.Trudnosc;
+            PunktyBazoweHistoryczne = rodzaj.PunktyBazowe;
         }
 
         public void SetData(DateTime data)
@@ -59,26 +59,18 @@ namespace system_zawodnicy_zimowi.core.Domain.Entities
             Miejsce = miejsce;
         }
 
-        public void SetTrudnosc(int trudnosc)
-        {
-            if (trudnosc < 1 || trudnosc > 5)
-                throw new DomainValidationException("Trudność trasy musi być w zakresie 1–5.");
-            TrudnoscTrasy = trudnosc;
-        }
+        
 
-        public void SetPunktyBazowe(int punktyBazowe)
-        {
-            if (punktyBazowe < 0 || punktyBazowe > 10000)
-                throw new DomainValidationException("Punkty bazowe muszą być w zakresie 0–10000.");
-            PunktyBazowe = punktyBazowe;
-        }
-
-
-
-
-
-
-
-
+        public string NazwaZawodow => NazwaHistoryczna;
+        public int TrudnoscTrasy => TrudnoscHistoryczna;
+        public int PunktyBazowe => PunktyBazoweHistoryczne;
     }
+
+
+
+
+
+
+
 }
+

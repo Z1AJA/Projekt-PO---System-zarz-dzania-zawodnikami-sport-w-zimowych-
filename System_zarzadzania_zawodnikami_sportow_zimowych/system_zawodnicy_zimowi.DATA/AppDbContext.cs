@@ -17,8 +17,8 @@ namespace system_zawodnicy_zimowi.Data
         public DbSet<Zawodnik> Zawodnicy { get; set; }
         public DbSet<KlubSportowy> Kluby { get; set; }
         public DbSet<WynikZawodow> Wyniki { get; set; }
+        public DbSet<RodzajZawodow> RodzajeZawodow { get; set; }
 
-       
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=ZawodnicyZimowiDB_v2;Trusted_Connection=True;");
@@ -44,10 +44,13 @@ namespace system_zawodnicy_zimowi.Data
                 .Metadata
                 .FindNavigation(nameof(Zawodnik.Wyniki))!
                 .SetPropertyAccessMode(PropertyAccessMode.Field);
+            modelBuilder.Entity<WynikZawodow>()
+            .HasOne(w => w.RodzajZawodow) 
+            .WithMany()                   
+            .HasForeignKey(w => w.RodzajZawodowId);
 
-            
 
-            
+
             var dyscyplinyConverter = new ValueConverter<List<Dyscyplina>, string>(
                 v => string.Join(",", v.Select(e => (int)e)),
                 v => v.Split(',', StringSplitOptions.RemoveEmptyEntries)

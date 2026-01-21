@@ -20,7 +20,7 @@ namespace system_zawodnicy_zimowi
 
         public ObservableCollection<Zawodnik> Zawodnicy { get; set; } = new ObservableCollection<Zawodnik>();
         public ObservableCollection<KlubSportowy> Kluby { get; set; } = new ObservableCollection<KlubSportowy>();
-        public ObservableCollection<WynikZawodow> BazaZawodow { get; set; } = new ObservableCollection<WynikZawodow>();
+        public ObservableCollection<RodzajZawodow> BazaZawodow { get; set; } = new ObservableCollection<RodzajZawodow>();
 
         public MainWindow()
         {
@@ -31,6 +31,7 @@ namespace system_zawodnicy_zimowi
                 // Inicjalizacja bazy przy starcie
                 using (var context = new AppDbContext())
                 {
+                    //context.Database.EnsureDeleted();
                     context.Database.EnsureCreated();
                 }
 
@@ -69,14 +70,11 @@ namespace system_zawodnicy_zimowi
                 foreach (var k in listaK) Kluby.Add(k);
 
                 // 3. Szablony
-                var wszystkieWyniki = context.Wyniki.ToList();
-                // Pobieramy ID wyników przypisanych do graczy
-                var idsWynikowGraczy = listaZ.SelectMany(z => z.Wyniki).Select(w => w.Id).ToHashSet();
-                // Szablony to te, które NIE są u graczy
-                var szablony = wszystkieWyniki.Where(w => !idsWynikowGraczy.Contains(w.Id)).ToList();
+                var rodzaje = context.RodzajeZawodow.ToList();
 
                 BazaZawodow.Clear();
-                foreach (var s in szablony) BazaZawodow.Add(s);
+                foreach (var r in rodzaje) BazaZawodow.Add(r);
+              
             }
 
             ListaDatagrid.Items.Refresh();
@@ -163,7 +161,6 @@ namespace system_zawodnicy_zimowi
 
         private void BtnDodajWynik_Click(object sender, RoutedEventArgs e)
         {
-            // 1. Sprawdzenie GUI
             var uiZawodnik = ListaDatagrid.SelectedItem as Zawodnik;
             if (uiZawodnik == null)
             {
@@ -171,7 +168,8 @@ namespace system_zawodnicy_zimowi
                 return;
             }
 
-            if (CmbZawodyWybor.SelectedItem is not WynikZawodow szablon)
+            // ZMIANA: Sprawdzamy czy wybrano RodzajZawodow
+            if (CmbZawodyWybor.SelectedItem is not RodzajZawodow wybranyRodzaj)
             {
                 MessageBox.Show("Wybierz zawody z listy rozwijanej.");
                 return;
@@ -189,34 +187,24 @@ namespace system_zawodnicy_zimowi
             {
                 using (var context = new AppDbContext())
                 {
-                    // 2. Pobieramy zawodnika z bazy (po ID)
                     var dbZawodnik = context.Zawodnicy
-                                            .Include(z => z.Wyniki) // Ważne!
+                                            .Include(z => z.Wyniki)
                                             .FirstOrDefault(z => z.Id == uiZawodnik.Id);
 
-                    if (dbZawodnik == null)
-                    {
-                        MessageBox.Show("Nie znaleziono zawodnika w bazie! Odśwież listę.");
-                        return;
-                    }
+                    if (dbZawodnik == null) return;
 
-                    // 3. Tworzymy nowy wynik
-                    var nowyWynik = new WynikZawodow(
-                        data,
-                        szablon.NazwaZawodow,
-                        miejsce,
-                        szablon.TrudnoscTrasy,
-                        szablon.PunktyBazowe
-                    );
+                    // ZMIANA: Pobieramy ten sam rodzaj zawodów z bazy (po ID)
+                    var dbRodzaj = context.RodzajeZawodow.FirstOrDefault(r => r.Id == wybranyRodzaj.Id);
 
-                    // 4. Modyfikujemy obiekt (EF to śledzi automatycznie!)
+                    if (dbRodzaj == null) return;
+
+                    // ZMIANA: Tworzymy wynik używając nowego konstruktora (przekazujemy cały obiekt rodzaju)
+                    var nowyWynik = new WynikZawodow(data, miejsce, dbRodzaj);
+
                     dbZawodnik.DodajWynik(nowyWynik);
                     _punktacjaService.Przelicz(dbZawodnik);
 
-                    // USUŃ TĘ LINIJKĘ: context.Entry(dbZawodnik).State = EntityState.Modified; 
-                    // Ona psuła zapis! EF sam wie, że coś się zmieniło.
-
-                    // 5. Zapisujemy
+                    context.Entry(nowyWynik).State = EntityState.Added;
                     context.SaveChanges();
                 }
 
@@ -225,16 +213,18 @@ namespace system_zawodnicy_zimowi
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Message: {ex.Message}\n\nInner: {ex.InnerException?.Message}\n\nStackTrace: {ex.StackTrace}");
+                MessageBox.Show($"Błąd: {ex.Message}\nInner: {ex.InnerException?.Message}");
             }
         }
 
         private void CmbZawodyWybor_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (CmbZawodyWybor.SelectedItem is WynikZawodow szablon)
+            
+            if (CmbZawodyWybor.SelectedItem is RodzajZawodow szablon)
             {
-                TxtNazwaZawodow.Text = szablon.NazwaZawodow;
-                TxtTrudnosc.Text = szablon.TrudnoscTrasy.ToString();
+                // Uwaga: w klasie RodzajZawodow pole nazywa się 'Nazwa', a nie 'NazwaZawodow'
+                TxtNazwaZawodow.Text = szablon.Nazwa;
+                TxtTrudnosc.Text = szablon.Trudnosc.ToString();
                 TxtPunktyBazowe.Text = szablon.PunktyBazowe.ToString();
             }
         }
@@ -274,13 +264,16 @@ namespace system_zawodnicy_zimowi
 
                 using (var context = new AppDbContext())
                 {
-                    var szablon = new WynikZawodow(DateTime.Now, nazwa, 1, trudnosc, pkt);
-                    context.Wyniki.Add(szablon);
+                    // ZMIANA: Tworzymy obiekt RodzajZawodow
+                    var nowyRodzaj = new RodzajZawodow(nazwa, trudnosc, pkt);
+
+                    // Dodajemy do nowej tabeli
+                    context.RodzajeZawodow.Add(nowyRodzaj);
                     context.SaveChanges();
                 }
                 OdswiezWszystko();
                 TxtDefZawodyNazwa.Clear();
-                MessageBox.Show("Szablon dodany.");
+                MessageBox.Show("Nowy rodzaj zawodów dodany do bazy.");
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
@@ -322,6 +315,11 @@ namespace system_zawodnicy_zimowi
         }
 
         private void TxtNazwisko_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void GridZawody_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }
