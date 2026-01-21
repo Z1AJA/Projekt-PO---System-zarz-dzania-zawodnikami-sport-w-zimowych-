@@ -48,8 +48,7 @@ namespace system_zawodnicy_zimowi.core.Seed
             var z3 = new Snowboardzista("Piotr", "Zieliński", 20);
             var z4 = new Snowboardzista("Kaja", "Wójcik", 27);
 
-            // --- 1. TWORZYMY RODZAJE ZAWODÓW (SZABLONY) ---
-            // Musimy je stworzyć jako obiekty, aby przekazać je do wyników
+            //1.TWORZYMY RODZAJE ZAWODÓW 
             var rWinterA = new RodzajZawodow("Puchar Winter A", 3, 450);
             var rWinterB = new RodzajZawodow("Puchar Winter B", 4, 500);
 
@@ -62,7 +61,7 @@ namespace system_zawodnicy_zimowi.core.Seed
             var rRiders = new RodzajZawodow("Riders Open", 2, 260);
             var rRidersFinal = new RodzajZawodow("Riders Open Final", 3, 330);
 
-            // --- 2. DODAJEMY WYNIKI (UŻYWAJĄC NOWEGO KONSTRUKTORA) ---
+            //2. DODAJEMY WYNIKI
 
             // Jan Kowalski
             z1.DodajWynik(new WynikZawodow(DateTime.Now.AddDays(-30), 12, rWinterA));
@@ -83,7 +82,7 @@ namespace system_zawodnicy_zimowi.core.Seed
             return new List<Zawodnik> { z1, z2, z3, z4 };
         }
 
-        // Opcjonalnie: Metoda pomocnicza, gdybyś chciał pobrać same szablony do bazy
+        //Metoda pomocnicza
         public static List<RodzajZawodow> PrzykladoweRodzaje()
         {
             return new List<RodzajZawodow>

@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="system_zawodnicy_zimowi.core.Domain.Entities.KlubSportowy" Collapsed="true">
+    <Position X="0.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EABCAAAgAAAAAAEAAACAAAAQABAEAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Domain\Entities\KlubSportowy.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="system_zawodnicy_zimowi.core.Domain.Entities.NarciarzAlpejski" Collapsed="true">
+    <Position X="1" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>Domain\Entities\NarciarzAlpejski.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="system_zawodnicy_zimowi.core.Domain.Entities.RodzajZawodow" Collapsed="true">
+    <Position X="4.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAABAAAAIAgEAAAAAAAQAQAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Domain\Entities\RodzajZawodow.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="system_zawodnicy_zimowi.core.Domain.Entities.Snowboardzista" Collapsed="true">
+    <Position X="3.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>Domain\Entities\Snowboardzista.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="system_zawodnicy_zimowi.core.Domain.Entities.WynikZawodow" Collapsed="true">
+    <Position X="2.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQCAIABAAAAAAgAAEQQQAAAAAAAABQAAEAAAAAAIAA=</HashCode>
+      <FileName>Domain\Entities\WynikZawodow.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="system_zawodnicy_zimowi.core.Domain.Entities.Zawodnik" Collapsed="true">
+    <Position X="2.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIASBAABIIAwQgQAgAAAAAEAAAQAAoAAAAAkAAACBBA=</HashCode>
+      <FileName>Domain\Entities\Zawodnik.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

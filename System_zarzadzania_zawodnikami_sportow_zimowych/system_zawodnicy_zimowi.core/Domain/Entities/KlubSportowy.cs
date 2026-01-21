@@ -29,7 +29,6 @@ namespace system_zawodnicy_zimowi.core.Domain.Entities
 
         public int MinimalnePunkty { get; private set; }
         
-        // jak dasz null nie bedzie limitu
         public int? MaksWiek { get; private set; }
 
         // Lista dyscyplin przyjmowanych przez klub
