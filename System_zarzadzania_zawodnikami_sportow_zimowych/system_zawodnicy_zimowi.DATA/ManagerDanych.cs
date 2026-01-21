@@ -28,7 +28,7 @@ namespace system_zawodnicy_zimowi.Data
         {
             using (var context = new AppDbContext())
             {
-                context.Database.EnsureCreated();
+                
 
                 if (!context.Zawodnicy.Any())
                 {
@@ -98,7 +98,7 @@ namespace system_zawodnicy_zimowi.Data
         {
             using (var context = new AppDbContext())
             {
-                
+
                 var srednia = context.Zawodnicy
                     .Where(z => z.KlubNazwa == nazwaKlubu)
                     .Average(z => z.Wiek);
@@ -106,5 +106,6 @@ namespace system_zawodnicy_zimowi.Data
                 return srednia;
             }
         }
+        
     }
 }

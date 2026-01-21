@@ -21,7 +21,7 @@ namespace system_zawodnicy_zimowi.core.Domain.Entities
         public string Nazwa
         {
             get => _nazwa;
-            private set
+            set
             {
                 if (string.IsNullOrWhiteSpace(value))
                     throw new DomainValidationException("Nazwa zawodów nie może być pusta.");
@@ -32,8 +32,8 @@ namespace system_zawodnicy_zimowi.core.Domain.Entities
             }
         }
 
-        public int Trudnosc { get; private set; }
-        public int PunktyBazowe { get; private set; }
+        public int Trudnosc { get;  set; }
+        public int PunktyBazowe { get;  set; }
 
         
         public RodzajZawodow(string nazwa, int trudnosc, int punktyBazowe)

@@ -33,6 +33,7 @@ namespace system_zawodnicy_zimowi
                 {
                     //context.Database.EnsureDeleted();
                     context.Database.EnsureCreated();
+                    new ManagerDanych().InicjalizujBaze();
                 }
 
                 // Załaduj wszystko
