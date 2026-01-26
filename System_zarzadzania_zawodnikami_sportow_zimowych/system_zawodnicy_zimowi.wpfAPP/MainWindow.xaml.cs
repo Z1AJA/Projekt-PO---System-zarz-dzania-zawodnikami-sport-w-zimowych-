@@ -55,7 +55,7 @@ namespace system_zawodnicy_zimowi
                 MessageBox.Show($"AWANS!\n{z.Imie} {z.Nazwisko}: {s} -> {n}", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        // Ta metoda pobiera świeże dane z bazy i wrzuca do GUI
+        //pobiera świeże dane z bazy i wrzuca do GUI
         private void OdswiezWszystko()
         {
             using (var context = new AppDbContext())
@@ -81,7 +81,7 @@ namespace system_zawodnicy_zimowi
             ListaDatagrid.Items.Refresh();
         }
 
-        // --- ZAWODNICY ---
+        //ZAWODNICY
 
         private void BtnDodaj_Click(object sender, RoutedEventArgs e)
         {
@@ -158,7 +158,7 @@ namespace system_zawodnicy_zimowi
             MessageBox.Show("Wypisano.");
         }
 
-        // --- WYNIKI (TU BYŁ GŁÓWNY PROBLEM) ---
+        //WYNIKI
 
         private void BtnDodajWynik_Click(object sender, RoutedEventArgs e)
         {
@@ -169,7 +169,7 @@ namespace system_zawodnicy_zimowi
                 return;
             }
 
-            // ZMIANA: Sprawdzamy czy wybrano RodzajZawodow
+            //Sprawdzamy czy wybrano RodzajZawodow
             if (CmbZawodyWybor.SelectedItem is not RodzajZawodow wybranyRodzaj)
             {
                 MessageBox.Show("Wybierz zawody z listy rozwijanej.");
@@ -194,12 +194,12 @@ namespace system_zawodnicy_zimowi
 
                     if (dbZawodnik == null) return;
 
-                    // ZMIANA: Pobieramy ten sam rodzaj zawodów z bazy (po ID)
+                    //Pobieramy ten sam rodzaj zawodów z bazy (po ID)
                     var dbRodzaj = context.RodzajeZawodow.FirstOrDefault(r => r.Id == wybranyRodzaj.Id);
 
                     if (dbRodzaj == null) return;
 
-                    // ZMIANA: Tworzymy wynik używając nowego konstruktora (przekazujemy cały obiekt rodzaju)
+                    //Tworzymy wynik używając nowego konstruktora (przekazujemy cały obiekt rodzaju)
                     var nowyWynik = new WynikZawodow(data, miejsce, dbRodzaj);
 
                     dbZawodnik.DodajWynik(nowyWynik);
@@ -223,14 +223,13 @@ namespace system_zawodnicy_zimowi
             
             if (CmbZawodyWybor.SelectedItem is RodzajZawodow szablon)
             {
-                // Uwaga: w klasie RodzajZawodow pole nazywa się 'Nazwa', a nie 'NazwaZawodow'
                 TxtNazwaZawodow.Text = szablon.Nazwa;
                 TxtTrudnosc.Text = szablon.Trudnosc.ToString();
                 TxtPunktyBazowe.Text = szablon.PunktyBazowe.ToString();
             }
         }
 
-        // --- KLUBY ---
+        //KLUBY
         private void BtnUtworzKlub_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -265,7 +264,7 @@ namespace system_zawodnicy_zimowi
 
                 using (var context = new AppDbContext())
                 {
-                    // ZMIANA: Tworzymy obiekt RodzajZawodow
+                    //Tworzymy obiekt RodzajZawodow
                     var nowyRodzaj = new RodzajZawodow(nazwa, trudnosc, pkt);
 
                     // Dodajemy do nowej tabeli
